@@ -3,9 +3,11 @@
 
 #include <cstdlib>
 #include <time.h>
+#include <iostream>
 
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "MacUILib.h"
 
 using namespace std;
 
@@ -20,7 +22,7 @@ class GameMechs
         int boardSizeX;
         int boardSizeY;
 
-        objPos food;
+        objPos foodPos;
 
     public:
         GameMechs();
@@ -43,6 +45,9 @@ class GameMechs
         void incrementScore();
         
         // More methods should be added here
+        void generateFood(objPosArrayList* blockOff);
+        objPos getFoodPos() const;
+
 };
 
 #endif
