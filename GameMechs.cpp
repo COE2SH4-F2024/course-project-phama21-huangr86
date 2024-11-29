@@ -8,7 +8,7 @@ GameMechs::GameMechs()
     exitFlag = false;
     loseFlag = false;
     input = 0;
-    foodPos = objPos(0,0,'@');
+    
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
@@ -19,7 +19,7 @@ GameMechs::GameMechs(int boardX, int boardY)
     exitFlag = false;
     loseFlag = false;
     input = 0;
-    foodPos = objPos(0,0,'@');
+
     
 }
 
@@ -85,24 +85,3 @@ void GameMechs::clearInput()
 }
 
 // More methods should be added here
-void GameMechs:: generateFood(objPosArrayList* blockOff){
-    int i, flag;
-    
-     do{
-        flag = 1;
-        foodPos.pos->x = rand() % (boardSizeX - 2) + 1;
-        foodPos.pos->y = rand() % (boardSizeY - 2) + 1;
-        
-        for(int i = 0 ; i < blockOff->getSize(); i++){
-            if (foodPos.pos->x  == blockOff->getElement(i).pos->x && foodPos.pos->y == blockOff->getElement(i).pos->y){
-            flag = 0;
-        }
-        }
-        
-
-    } while(!flag);
-}
-
-objPos GameMechs:: getFoodPos() const{
-    return foodPos;
-}

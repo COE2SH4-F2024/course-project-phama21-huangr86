@@ -42,7 +42,9 @@ void objPosArrayList::insertTail(objPos thisPos)
 
 void objPosArrayList::removeHead()
 {
-    for(int i = 0 ; i < listSize; i++){
+    if(listSize == 0) return;
+
+    for(int i = 0 ; i < listSize- 1; i++){
         aList[i] = aList[i + 1];
     }
     listSize--;
@@ -51,6 +53,8 @@ void objPosArrayList::removeHead()
 
 void objPosArrayList::removeTail()
 {
+    if(listSize == 0) return;
+    
     aList[listSize] = aList[listSize + 1];
     listSize--;
 }

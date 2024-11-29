@@ -1,9 +1,10 @@
 #include "Player.h"
 
 
-Player::Player(GameMechs* thisGMRef)
+Player::Player(GameMechs* thisGMRef, Food* thisFoodRef)
 {
     mainGameMechsRef = thisGMRef;
+    mainFoodRef = thisFoodRef;
     myDir = STOP;
     playerPos = objPos(15,7,'*');
     playerPosList = new objPosArrayList();
@@ -68,23 +69,24 @@ void Player::updatePlayerDir()
 
 void Player::movePlayer()
 {
+     int foodCollected = 0;
     // PPA3 Finite State Machine logic
     switch (myDir) {
         case UP:
             playerPos.pos->y--;
-            if (playerPos.pos->y < 2) playerPos.pos->y = mainGameMechsRef->getBoardSizeY() - 1;
+            if (playerPos.pos->y < 1) playerPos.pos->y = mainGameMechsRef->getBoardSizeY() - 2;
             break;
         case DOWN:
             playerPos.pos->y++;
-            if (playerPos.pos->y > mainGameMechsRef->getBoardSizeY() - 3) playerPos.pos->y = 0;
+            if (playerPos.pos->y > mainGameMechsRef->getBoardSizeY() - 2) playerPos.pos->y = 0;
             break;
         case LEFT:
             playerPos.pos->x--;
-            if (playerPos.pos->x < 2) playerPos.pos->x = mainGameMechsRef->getBoardSizeX() - 1;
+            if (playerPos.pos->x < 1) playerPos.pos->x = mainGameMechsRef->getBoardSizeX() -2;
             break;
         case RIGHT:
             playerPos.pos->x++;
-            if (playerPos.pos->x> mainGameMechsRef->getBoardSizeX() - 3) playerPos.pos->x = 0;
+            if (playerPos.pos->x> mainGameMechsRef->getBoardSizeX() - 2) playerPos.pos->x = 0;
             break;
         default:
             break;
@@ -94,20 +96,34 @@ void Player::movePlayer()
     for(int i = 1; i < playerPosList->getSize(); i++){
             objPos elementPos = playerPosList->getElement(i);
             if(playerPosList->getHeadElement().isPosEqual(&elementPos)){
-                mainGameMechsRef->setExitTrue();
                 mainGameMechsRef->setLoseFlag();
+                mainGameMechsRef->setExitTrue();
             }
         }
-
-        objPos foodPos = mainGameMechsRef->getFoodPos();
+   
+    for(int j = 0; j < mainFoodRef->getFoodPos()->getSize(); j++){
+        objPos foodPos = mainFoodRef->getFoodPos()->getElement(j);
         if(playerPosList->getHeadElement().isPosEqual(&foodPos)){
-             playerPosList->insertHead(playerPos);
-            mainGameMechsRef->incrementScore();
-            mainGameMechsRef->generateFood(playerPosList);
-        } else {
-            playerPosList->insertHead(playerPos);
-            playerPosList->removeTail();
-        }       
+            foodCollected = 1;
+            if(foodPos.getSymbol() == '&'){
+                playerPosList->insertHead(playerPos);
+                mainGameMechsRef->incrementScore();
+                mainFoodRef->generateFood(playerPosList);
+                break;
+            } else if(foodPos.getSymbol() == '@'){  
+                mainGameMechsRef->incrementScore();
+                mainFoodRef->generateFood(playerPosList);
+                break;
+            }
+            
+        }    
+    }
+
+    if(!foodCollected){
+        playerPosList->insertHead(playerPos);
+        playerPosList->removeTail();
+    }
+          
 }
 
 // More methods to be added

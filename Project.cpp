@@ -4,6 +4,7 @@
 #include "GameMechs.h"
 #include "Player.h"
 #include "objPosArrayList.h"
+#include "Food.h"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ void CleanUp(void);
 
 GameMechs* game; 
 Player* player;
+Food* food;
 
 
 
@@ -49,8 +51,10 @@ void Initialize(void)
     MacUILib_clearScreen();
    
     game = new GameMechs(WIDTH,HEIGHT);
-    player = new Player(game);
-    game->generateFood(player->getPlayerPos());
+    food = new Food(game);
+    player = new Player(game, food);
+    food->generateFood(player->getPlayerPos());
+
    
 
 }
@@ -77,7 +81,7 @@ void RunLogic(void)
 
 void DrawScreen(void)
 {
-    int i,j,size;
+    int i,j,k,l,size;
     objPosArrayList* playerPosList = player->getPlayerPos();
     size = playerPosList->getSize();
     MacUILib_clearScreen(); 
@@ -88,31 +92,35 @@ void DrawScreen(void)
                     MacUILib_printf("#");
             
             } else {
-                for(int k = 0; k < size; k++){
-                    objPos playerPosition = playerPosList->getElement(k);
-                     if (i == playerPosition.pos->y && j == playerPosition.pos->x ){
-                        MacUILib_printf("%c",playerPosition.getSymbol());
-                        itemFound = 1;
-                        break;
-                     }
+                for(l = 0; l < food->getFoodPos()->getSize();l++){
+                    if (food->getFoodPos()->getElement(l).pos->x == j && food->getFoodPos()->getElement(l).pos->y == i){
+                            MacUILib_printf("%c",food->getFoodPos()->getElement(l).getSymbol());
+                            itemFound = 1;
+                            break;
+                    }
                 }
-                if (!itemFound && game->getFoodPos().pos->x == j && game->getFoodPos().pos->y == i){
-                        MacUILib_printf("%c",game->getFoodPos().getSymbol());
+                if(!itemFound){
+                    for(k = 0; k < size; k++){
+                        objPos playerPosition = playerPosList->getElement(k);
+                        if (i == playerPosition.pos->y && j == playerPosition.pos->x ){
+                            MacUILib_printf("%c",playerPosition.getSymbol());
+                            itemFound = 1;
+                            break;  
+                        }
                 }
-                else if (!itemFound){
-                    MacUILib_printf(" ");
+                } 
+                if(!itemFound) {
+                     MacUILib_printf(" ");
                 }
-            
-            }
-                            
+            }                   
         }
         MacUILib_printf("\n");
-        
     }
     MacUILib_printf("Score: %d", game->getScore());
 
     if(game->getLoseFlagStatus()){
-        MacUILib_printf("You Fucking Suck\n");
+        MacUILib_printf("Oh No GoodLuck Next Time\n");
+        
     }
 
     
@@ -131,4 +139,6 @@ void CleanUp(void)
 
     MacUILib_uninit();
     delete game;
+    delete food;
+    delete player;
 }
