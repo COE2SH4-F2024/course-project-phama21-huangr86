@@ -120,6 +120,8 @@ void DrawScreen(void)
             MacUILib_printf("\n");
     }
     MacUILib_printf("Score: %d", game->getScore());   
+    MacUILib_printf("\n@ increases score by 10 and length by 1");
+    MacUILib_printf("\n& only increases score by 10");
     } else {
         MacUILib_printf("Oh No GoodLuck Next Time\n");
         MacUILib_printf("Score: %d", game->getScore());
