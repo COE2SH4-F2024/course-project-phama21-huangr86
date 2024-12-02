@@ -2,10 +2,11 @@
 
 GameMechs::GameMechs()
 {
+    //Constructor for snake game
     boardSizeX = 0;
     boardSizeY = 0;
     score = 0;
-    exitFlag = false;
+    exitFlag = false;     
     loseFlag = false;
     input = 0;
     
@@ -13,6 +14,7 @@ GameMechs::GameMechs()
 
 GameMechs::GameMechs(int boardX, int boardY)
 {
+    //Copy Constructor for snake game
     boardSizeX = boardX;
     boardSizeY = boardY;
     score = 0;
@@ -23,7 +25,7 @@ GameMechs::GameMechs(int boardX, int boardY)
     
 }
 
-// do you need a destructor?
+
 GameMechs :: ~GameMechs(){
     
 }
@@ -51,7 +53,7 @@ int GameMechs::getScore() const
 
 void GameMechs::incrementScore()
 {
-    score+= 10;
+    score+= 10; 
 }
 
 int GameMechs::getBoardSizeX() const
@@ -66,7 +68,7 @@ int GameMechs::getBoardSizeY() const
 
 void GameMechs::setExitTrue()
 {
-    exitFlag =  true;
+    exitFlag =  true; // Allows game to end
 }
 
 void GameMechs::setLoseFlag()
@@ -84,4 +86,4 @@ void GameMechs::clearInput()
     input = 0;
 }
 
-// More methods should be added here
+

@@ -17,7 +17,7 @@ objPos::objPos(int xPos, int yPos, char sym)
 }
 
 // Respect the rule of six / minimum four
-// [TODO] Implement the missing special member functions to meet the minimum four rule
+
 objPos::objPos(const objPos &o){
     
     pos = new Pos;
@@ -52,6 +52,7 @@ void objPos::setObjPos(int xPos, int yPos, char sym)
 
 objPos objPos::getObjPos() const
 {
+    //Allows the user to get the position of an Objpos that was created
     objPos returnPos;
     returnPos.pos->x = pos->x;
     returnPos.pos->y = pos->y;
@@ -60,6 +61,7 @@ objPos objPos::getObjPos() const
     return returnPos;
 }
 objPos:: ~objPos(){
+    //Deconstructor
     delete pos;
 }
 
@@ -70,11 +72,13 @@ char objPos::getSymbol() const
 
 bool objPos::isPosEqual(const objPos* refPos) const
 {
+    //Used to check whether current object's position is the same as a item on the board
     return (refPos->pos->x == pos->x && refPos->pos->y == pos->y);
 }
 
 char objPos::getSymbolIfPosEqual(const objPos* refPos) const
 {
+    //Returns the symbol of object if the head of the snake is on its current position
     if(isPosEqual(refPos))
         return symbol;
     else

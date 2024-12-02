@@ -34,7 +34,7 @@ void Player::updatePlayerDir()
     if(input != 0)  // if not null character
          
     {
-        switch(input)
+        switch(input)  //Cases for the enum, same concept as PPA3
         {                      
             case 27:
                 mainGameMechsRef->setExitTrue();
@@ -70,7 +70,7 @@ void Player::updatePlayerDir()
 void Player::movePlayer()
 {
      int foodCollected = 0;
-    // PPA3 Finite State Machine logic
+    // PPA3 Finite State Machine logic, same logic as PPA3
     switch (myDir) {
         case UP:
             playerPos.pos->y--;
@@ -95,9 +95,10 @@ void Player::movePlayer()
     }  
     for(int i = 1; i < playerPosList->getSize(); i++){
             objPos elementPos = playerPosList->getElement(i);
+            //When snake collides with its own body the user loses and game ends
             if(playerPosList->getHeadElement().isPosEqual(&elementPos)){
                 mainGameMechsRef->setLoseFlag();
-                mainGameMechsRef->setExitTrue();
+                
             }
         }
    
@@ -110,7 +111,7 @@ void Player::movePlayer()
                 mainGameMechsRef->incrementScore();
                 mainFoodRef->generateFood(playerPosList);
                 break;
-            } else if(foodPos.getSymbol() == '@'){  
+            } else if(foodPos.getSymbol() == '@'){  //Special food, score increases by 10 however the snake body doesn't change
                 mainGameMechsRef->incrementScore();
                 mainFoodRef->generateFood(playerPosList);
                 break;
@@ -120,8 +121,10 @@ void Player::movePlayer()
     }
 
     if(!foodCollected){
+        //As whole snake body moves, it inputs the head in its new position whilst delete the tail
         playerPosList->insertHead(playerPos);
         playerPosList->removeTail();
+        
     }
           
 }

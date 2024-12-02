@@ -1,8 +1,5 @@
 #include "objPosArrayList.h"
 
-// Paste your Tested implementation here.
-// Paste your Tested implementation here.
-// Paste your Tested implementation here.
 // Check lecture contents on general purpose array list construction, 
 // and modify it to support objPos array list construction.
 
@@ -29,7 +26,7 @@ void objPosArrayList::insertHead(objPos thisPos)
     
 
     for(int i = listSize; i  > 0; i--){
-        aList[i] = aList[i - 1];
+        aList[i] = aList[i - 1];  //Shifts items in the array back so new head doesnt overwrite over values
     }
 
     aList[0] = thisPos;
@@ -46,7 +43,7 @@ void objPosArrayList::insertTail(objPos thisPos)
 void objPosArrayList::removeHead()
 {
     for(int i = 0 ; i < listSize- 1; i++){
-        aList[i] = aList[i + 1];
+        aList[i] = aList[i + 1]; // Shifts item foward in the array as head gets removed
     }
     listSize--;
     

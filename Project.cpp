@@ -50,7 +50,7 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
    
-    game = new GameMechs(WIDTH,HEIGHT);
+    game = new GameMechs(WIDTH,HEIGHT); //Allocating dynamic memory
     food = new Food(game);
     player = new Player(game, food);
     food->generateFood(player->getPlayerPos());
@@ -62,7 +62,7 @@ void Initialize(void)
 void GetInput(void)
 {
     if(MacUILib_hasChar() == 1){
-        game->setInput(MacUILib_getChar());
+        game->setInput(MacUILib_getChar());//Allows user to interact with keyboard to move the snake
     }
     
    
@@ -71,10 +71,8 @@ void GetInput(void)
 void RunLogic(void)
 {
 
-    player->updatePlayerDir();
+    player->updatePlayerDir(); //Runs functions from player.cpp to determine the direction then moving the player
     player->movePlayer();
-    
-   
     
     
 }
@@ -82,46 +80,54 @@ void RunLogic(void)
 void DrawScreen(void)
 {
     int i,j,k,l,size;
-    objPosArrayList* playerPosList = player->getPlayerPos();
+    objPosArrayList* playerPosList = player->getPlayerPos(); //Creates a new Arraylist for the snake body
     size = playerPosList->getSize();
     MacUILib_clearScreen(); 
-    for (i = 0; i < HEIGHT; i++ ){
-        for (j = 0; j < WIDTH; j++){
-            int itemFound = 0;
-            if(i == 0 || i == HEIGHT - 1 || j == 0 || j == WIDTH - 1){
-                    MacUILib_printf("#");
-            
-            } else {
-                for(l = 0; l < food->getFoodPos()->getSize();l++){
-                    if (food->getFoodPos()->getElement(l).pos->x == j && food->getFoodPos()->getElement(l).pos->y == i){
-                            MacUILib_printf("%c",food->getFoodPos()->getElement(l).getSymbol());
-                            itemFound = 1;
-                            break;
-                    }
-                }
-                if(!itemFound){
-                    for(k = 0; k < size; k++){
-                        objPos playerPosition = playerPosList->getElement(k);
-                        if (i == playerPosition.pos->y && j == playerPosition.pos->x ){
-                            MacUILib_printf("%c",playerPosition.getSymbol());
-                            itemFound = 1;
-                            break;  
+    //Display lose status
+    if(!game->getLoseFlagStatus()){
+        for (i = 0; i < HEIGHT; i++ ){
+            for (j = 0; j < WIDTH; j++){
+                int itemFound = 0;
+                if(i == 0 || i == HEIGHT - 1 || j == 0 || j == WIDTH - 1){
+                        MacUILib_printf("#");
+                
+                } else {
+                    //Draws all food items on the display board
+                    for(l = 0; l < food->getFoodPos()->getSize();l++){
+                        if (food->getFoodPos()->getElement(l).pos->x == j && food->getFoodPos()->getElement(l).pos->y == i){
+                                MacUILib_printf("%c",food->getFoodPos()->getElement(l).getSymbol());
+                                itemFound = 1;
+                                break;
                         }
-                }
-                } 
-                if(!itemFound) {
-                     MacUILib_printf(" ");
-                }
-            }                   
-        }
-        MacUILib_printf("\n");
+                    }
+                    if(!itemFound){
+                        //Draws position of player on the board
+                        for(k = 0; k < size; k++){
+                            objPos playerPosition = playerPosList->getElement(k);
+                            if (i == playerPosition.pos->y && j == playerPosition.pos->x ){
+                                MacUILib_printf("%c",playerPosition.getSymbol());
+                                itemFound = 1;
+                                break;  
+                            }
+                    }
+                    } 
+                    if(!itemFound) {
+                        //Draws the rest of the board/empty spaces
+                        MacUILib_printf(" ");
+                    }
+                }                   
+            }
+            MacUILib_printf("\n");
     }
-    MacUILib_printf("Score: %d", game->getScore());
-
-    if(game->getLoseFlagStatus()){
+    MacUILib_printf("Score: %d", game->getScore());   
+    } else {
         MacUILib_printf("Oh No GoodLuck Next Time\n");
-        
+        MacUILib_printf("Score: %d", game->getScore());
     }
+   
+    
+
+    
 
     
        
@@ -138,6 +144,8 @@ void CleanUp(void)
     MacUILib_clearScreen();    
 
     MacUILib_uninit();
+
+    //Deallocating memory
     delete game;
     delete food;
     delete player;
